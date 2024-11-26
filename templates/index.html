@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Generation and Evaluation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <script>
+        function loadContent(url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('tabContent').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading content:', error);
+                    document.getElementById('tabContent').innerHTML = '<p>Sorry, there was an error loading the content.</p>';
+                });
+        }
+
+        // Load the overview content by default when the page first loads
+        window.onload = function() {
+            loadContent('/overview');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <center><header><h1>Story Generation and Evaluation Project</h1></header></center>
+        
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button onclick="loadContent('/overview')">Overview</button>
+            <button onclick="loadContent('/generate-story')">Generate Story with Default Prompts</button>
+            <button onclick="loadContent('/generate-story-custom')">Generate Story with Custom Prompts</button>
+        </div>
+
+        <!-- Tab Content - Content will be dynamically loaded here -->
+        <div id="tabContent">
+            <!-- Overview content will be loaded here by default -->
+        </div>
+    </div>
+</body>
+</html>

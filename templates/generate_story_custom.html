@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Story with Custom Prompts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Generate Story Summary with Custom Prompts</h1>
+    </header>
+    <section class="content">
+        <form action="{{ url_for('generate_story_custom') }}" method="POST">
+            <label for="story_title">Select Story:</label>
+            <select id="story_title" name="story_title" required>
+                {% for title in titles %}
+                    <option value="{{ title }}">{{ title }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="genre">Select Genre:</label>
+            <select id="genre" name="genre" required>
+                {% for genre in genres %}
+                    <option value="{{ genre }}">{{ genre }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="zero_shot_prompt">Zero-shot Prompt:</label>
+            <textarea id="zero_shot_prompt" name="zero_shot_prompt" rows="4" required></textarea>
+            
+            <label for="few_shot_prompt">Few-shot Prompt:</label>
+            <textarea id="few_shot_prompt" name="few_shot_prompt" rows="4" required></textarea>
+            
+            <label for="reflexion_prompt">Reflexion Prompt:</label>
+            <textarea id="reflexion_prompt" name="reflexion_prompt" rows="4" required></textarea>
+
+            <button type="submit">Generate Story</button>
+        </form>
+    </section>
+</body>
+</html>

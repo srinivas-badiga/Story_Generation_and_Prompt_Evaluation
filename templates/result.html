@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Generation Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Story Generation Results</h1>
+    </header>
+    <section class="content">
+        <h2><center>Best Technique: {{ best_technique }}</center></h2>
+        <h3><center>Evaluation Plot:</center></h3>
+        <center><img src="data:image/png;base64,{{ plot_image }}" alt="Evaluation Plot" /></center>
+        <div class="results">
+            {% for technique, result in results.items() %}
+                <div class="result-item">
+                    <center><h3>{{ technique | capitalize }}</h3></center>
+                    <p><strong>Generated Story:</strong></p>
+                    <p>{{ result['summary'] }}</p>
+                    <h4>Evaluation Metrics:</h4>
+                    <ul>
+                        <li><strong>ROUGE-1:</strong> {{ result['rouge_scores']['rouge1'].fmeasure }}</li>
+                        <li><strong>ROUGE-2:</strong> {{ result['rouge_scores']['rouge2'].fmeasure }}</li>
+                        <li><strong>ROUGE-L:</strong> {{ result['rouge_scores']['rougeL'].fmeasure }}</li>
+                        <li><strong>BLEU:</strong> {{ result['bleu_score'] }}</li>
+                        <li><strong>METEOR:</strong> {{ result['meteor_score'] }}</li>
+                        <li><strong>Coherence:</strong> {{ result['coherence'] }}</li>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        
+    </section>
+</body>
+</html>

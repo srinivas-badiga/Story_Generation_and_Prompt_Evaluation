@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Project Overview</h1>
+    </header>
+    <section class="content">
+        <h2>Story Generation and Evaluation</h2>
+        <p>This is an Story generation and evaluation project using different prompting techniques.</p>
+        <h3>Course:</h3>
+        <p>Interactive Fiction and Text Generation</p>
+        <h3>Professor:</h3>
+        <div class="professor-container">
+            <!--<img src="{{ url_for('static', filename='images/professor.jpg') }}" alt="Professor Name"> -->
+            <p>Dr. Lara Martin</p>
+        </div>
+        <h3>Team Members:</h3>
+        <div class="team-container">
+            <div class="row">
+                <div class="team-member">
+                    <img src="{{ url_for('static', filename='images/member1.JPG') }}" alt="Member 1">
+                    <p>Badiga Srinivas</p>
+                </div>
+                <div class="team-member">
+                    <img src="{{ url_for('static', filename='images/member2.jpg') }}" alt="Member 2">
+                    <p>Cirriguri Pavana Sanjana</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="team-member">
+                    <img src="{{ url_for('static', filename='images/member3.jpg') }}" alt="Member 3">
+                    <p>Dayakar Reddy Kadasani</p>
+                </div>
+                <div class="team-member">
+                    <img src="{{ url_for('static', filename='images/member4.jpeg') }}" alt="Member 4">
+                    <p>Kanduri Venkata Yashwant</p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+</body>
+</html>
