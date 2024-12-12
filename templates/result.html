@@ -5,34 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story Generation Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .metrics-dropdown {
+            display: none;
+        }
+        .metrics-dropdown.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Story Generation Results</h1>
     </header>
     <section class="content">
-        <h2><center>Best Technique: {{ best_technique }}</center></h2>
-        <h3><center>Evaluation Plot:</center></h3>
-        <center><img src="data:image/png;base64,{{ plot_image }}" alt="Evaluation Plot" /></center>
+        <h2><center>Best Technique: {{ best_technique | capitalize}}</center></h2>
         <div class="results">
             {% for technique, result in results.items() %}
                 <div class="result-item">
                     <center><h3>{{ technique | capitalize }}</h3></center>
+                    
                     <p><strong>Generated Story:</strong></p>
                     <p>{{ result['summary'] }}</p>
-                    <h4>Evaluation Metrics:</h4>
-                    <ul>
-                        <li><strong>ROUGE-1:</strong> {{ result['rouge_scores']['rouge1'].fmeasure }}</li>
-                        <li><strong>ROUGE-2:</strong> {{ result['rouge_scores']['rouge2'].fmeasure }}</li>
-                        <li><strong>ROUGE-L:</strong> {{ result['rouge_scores']['rougeL'].fmeasure }}</li>
-                        <li><strong>BLEU:</strong> {{ result['bleu_score'] }}</li>
-                        <li><strong>METEOR:</strong> {{ result['meteor_score'] }}</li>
-                        <li><strong>Coherence:</strong> {{ result['coherence'] }}</li>
-                    </ul>
+
+                    <!-- Display Confidence Score -->
+                    <p><strong>Confidence Score:</strong> {{ result['confidence_score'] }}</p>
+
+
+                    <!-- Dropdown for Evaluation Metrics -->
+                    <button style="
+                            background-color: #4CAF50;
+                            color: white;
+                            border: none;
+                            padding: 10px 15px;
+                            margin-top: 10px;
+                            cursor: pointer;
+                            border-radius: 5px;
+                            font-size: 16px;
+                            transition: background-color 0.3s;
+                            " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'" onclick="toggleMetrics('{{ technique }}')">
+                            View Evaluation Metrics
+                    </button>
+
+                    <div id="metrics-{{ technique }}" class="metrics-dropdown">
+                        <h4>Evaluation Metrics:</h4>
+                        <ul>
+                            <li><strong>ROUGE-1:</strong> {{ result['rouge_scores']['rouge1'].fmeasure }}</li>
+                            <li><strong>ROUGE-2:</strong> {{ result['rouge_scores']['rouge2'].fmeasure }}</li>
+                            <li><strong>ROUGE-L:</strong> {{ result['rouge_scores']['rougeL'].fmeasure }}</li>
+                            <li><strong>BLEU:</strong> {{ result['bleu_score'] }}</li>
+                            <li><strong>METEOR:</strong> {{ result['meteor_score'] }}</li>
+                            <li><strong>Coherence:</strong> {{ result['coherence'] }}</li>
+                        </ul>
+                    </div>
                 </div>
             {% endfor %}
         </div>
+        <h3><center>Evaluation Plot</center></h3>
+        <center><img src="data:image/png;base64,{{ plot_image }}" alt="Evaluation Plot" /></center>
         
     </section>
+
+    <script>
+        function toggleMetrics(technique) {
+            var metricsDiv = document.getElementById('metrics-' + technique);
+            if (metricsDiv.classList.contains('active')) {
+                metricsDiv.classList.remove('active');
+            } else {
+                metricsDiv.classList.add('active');
+            }
+        }
+    </script>
 </body>
 </html>
