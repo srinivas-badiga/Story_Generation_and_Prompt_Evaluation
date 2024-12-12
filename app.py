@@ -78,10 +78,10 @@ def evaluate_coherence(text):
 def evaluate_confidence(rouge_scores, bleu_score, meteor_score, coherence):
     # Combine metrics into a single confidence score (weighted average)
     # You can adjust the weights based on importance
-    rouge_weight = 0.3
-    bleu_weight = 0.2
-    meteor_weight = 0.2
-    coherence_weight = 0.3
+    rouge_weight = 0.25
+    bleu_weight = 0.25
+    meteor_weight = 0.25
+    coherence_weight = 0.25
     
     confidence_score = (
         rouge_weight * (rouge_scores['rouge1'].fmeasure + rouge_scores['rouge2'].fmeasure + rouge_scores['rougeL'].fmeasure) / 3 +
