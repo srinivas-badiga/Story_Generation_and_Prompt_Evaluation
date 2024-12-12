@@ -8,6 +8,6 @@ pandas==2.0.3
 nltk==3.8.1
 spacy==3.6.0
 torch==2.1.0
-tensorflow-macos==2.14.0
+tensorflow==2.14.0
 keras==2.14.0
 gunicorn==21.2.0
