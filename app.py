@@ -25,9 +25,9 @@ titles = roc_stories_df['storytitle'].unique().tolist()
 genres = ["Comedy", "Drama", "Fantasy", "Horror", "Mystery", "Romance", "Sci-Fi", "Thriller"]
 
 # OpenAI API configuration
-openai.api_key = "sk-********" #ask us for api key
-fine_tuned_model_id = "ft:****"  #ask us for fine tuned model id
-
+openai.api_key = "*******"
+fine_tuned_model_id = "ft:gpt-4o-mini-2024-07-18:cognizant::ATuTY5OP"
+#fine_tuned_model_id = "gpt-4o-mini-2024-07-18"
 # Load spaCy model for coherence calculation
 nlp = spacy.load("en_core_web_md")
 
@@ -75,19 +75,68 @@ def evaluate_coherence(text):
     
     return coherence_score
 
+def evaluate_confidence(rouge_scores, bleu_score, meteor_score, coherence):
+    # Combine metrics into a single confidence score (weighted average)
+    # You can adjust the weights based on importance
+    rouge_weight = 0.3
+    bleu_weight = 0.2
+    meteor_weight = 0.2
+    coherence_weight = 0.3
+    
+    confidence_score = (
+        rouge_weight * (rouge_scores['rouge1'].fmeasure + rouge_scores['rouge2'].fmeasure + rouge_scores['rougeL'].fmeasure) / 3 +
+        bleu_weight * bleu_score +
+        meteor_weight * meteor_score +
+        coherence_weight * coherence
+    )
+    
+    # Normalize the confidence score to be between 0 and 1
+    max_possible_score = 1.0
+    return min(confidence_score / max_possible_score, 1.0)
+
+
 
 # Generate Story using OpenAI API
 def generate_stories(prompt, model_id=fine_tuned_model_id):
     response = openai.ChatCompletion.create(
         model=model_id,
         messages=[
-            {"role": "system", "content": "Write a story about a strong central character embarking on a journey filled with mystery and discovery, with vivid descriptions, logical progression, and a clear beginning, middle, and end, emphasizing exploration, wonder, and rich character development in fluent, original language."},
+            {"role": "system", "content": "Write a 150-word detailed story about a strong central character embarking on a journey filled with mystery and discovery, with vivid descriptions, logical progression, and a clear beginning, middle, and end, emphasizing exploration, wonder, and rich character development in fluent, original language."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=150,
+        max_tokens=500,
         temperature=0.7,
     )
     return response['choices'][0]['message']['content'].strip()
+
+def generate_stories_with_reflexion(prompt, model_id=fine_tuned_model_id):
+    # Initial story generation
+    initial_response = openai.ChatCompletion.create(
+        model=model_id,
+        messages=[
+            {"role": "system", "content": "Write a 150-word detailed story about a strong central character embarking on a journey filled with mystery and discovery, with vivid descriptions, logical progression, and a clear beginning, middle, and end, emphasizing exploration, wonder, and rich character development in fluent, original language."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=500,
+        temperature=0.7,
+    )
+    
+    initial_story = initial_response['choices'][0]['message']['content'].strip()
+    
+    # Reflexion step: Ask the model to evaluate and revise the story
+    reflection_response = openai.ChatCompletion.create(
+        model=model_id,
+        messages=[
+            {"role": "system", "content": "Evaluate the following story for coherence, vivid descriptions, logical progression, and adherence to the theme of mystery and discovery. Identify areas where the story could be improved, and then provide a revised version with these improvements applied. And return the 150-word detailed story based on this evaluation. Do not include anything but the new generated story in the response"},
+            {"role": "user", "content": initial_story}
+        ],
+        max_tokens=500,
+        temperature=0.7,
+    )
+    
+    revised_story = reflection_response['choices'][0]['message']['content'].strip()
+    
+    return revised_story
 
 # Plotting function for evaluation results
 def plot_metrics(results):
@@ -163,15 +212,21 @@ def generate_story():
 
         results = {}
         best_technique = None
-        best_bleu = -1
+        best_confidence = -1
 
         # Generate stories and evaluate each prompting technique
         for prompt_type, prompt in prompts.items():
-            summary = generate_stories(prompt)
+            if prompt_type=="reflexion":
+                summary = generate_stories_with_reflexion(prompt)
+            else:
+                summary = generate_stories(prompt)
             rouge_scores = evaluate_rouge(summary, reference_story)
             bleu_score = evaluate_bleu(summary, reference_story)
             meteor_score_val = evaluate_meteor(summary, reference_story)
             coherence = evaluate_coherence(summary)
+            # Calculate the confidence score
+            confidence_score = evaluate_confidence(rouge_scores, bleu_score, meteor_score_val, coherence)
+
 
             # Store results
             results[prompt_type] = {
@@ -179,12 +234,13 @@ def generate_story():
                 "rouge_scores": rouge_scores,
                 "bleu_score": bleu_score,
                 "meteor_score": meteor_score_val,
-                "coherence": coherence
+                "coherence": coherence,
+                "confidence_score": round(confidence_score, 3)
             }
 
             # Determine the best technique based on BLEU score
-            if bleu_score > best_bleu:
-                best_bleu = bleu_score
+            if confidence_score > best_confidence:
+                best_confidence = confidence_score
                 best_technique = prompt_type
 
         # Plot the metrics for all techniques
@@ -231,15 +287,21 @@ def generate_story_custom():
 
         results = {}
         best_technique = None
-        best_bleu = -1
+        best_confidence = -1
 
         # Generate stories and evaluate each prompting technique
         for prompt_type, prompt in prompts.items():
-            summary = generate_stories(prompt)
+            if prompt_type=="reflexion":
+                summary = generate_stories_with_reflexion(prompt)
+            else:
+                summary = generate_stories(prompt)
             rouge_scores = evaluate_rouge(summary, reference_story)
             bleu_score = evaluate_bleu(summary, reference_story)
             meteor_score_val = evaluate_meteor(summary, reference_story)
             coherence = evaluate_coherence(summary)
+            # Calculate the confidence score
+            confidence_score = evaluate_confidence(rouge_scores, bleu_score, meteor_score_val, coherence)
+
 
             # Store results
             results[prompt_type] = {
@@ -247,13 +309,15 @@ def generate_story_custom():
                 "rouge_scores": rouge_scores,
                 "bleu_score": bleu_score,
                 "meteor_score": meteor_score_val,
-                "coherence": coherence
+                "coherence": coherence,
+                "confidence_score": round(confidence_score, 3)
             }
 
             # Determine the best technique based on BLEU score
-            if bleu_score > best_bleu:
-                best_bleu = bleu_score
+            if confidence_score > best_confidence:
+                best_confidence = confidence_score
                 best_technique = prompt_type
+
 
         # Plot the metrics for all techniques
         plot_image = plot_metrics(results)
