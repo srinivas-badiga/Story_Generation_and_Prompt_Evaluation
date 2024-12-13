@@ -105,6 +105,7 @@ To use this project, you will need Anaconda or Miniconda installed on your syste
 - **`static/`**: CSS and JavaScript files for styling and interactivity.
 - **`data.csv`**: Dataset containing story titles and reference stories.
 - **`requirements.txt`**: List of dependencies for the project.
+- **`System Diagram.png`**: System Architecture.
 
 ---
 
