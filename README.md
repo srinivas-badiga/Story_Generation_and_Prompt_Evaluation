@@ -91,12 +91,16 @@ To use this project, you will need Anaconda or Miniconda installed on your syste
 
 ## Project Workflow
 
-1. **User Input**: Select a story title and genre or provide a custom prompt via the web interface.
-2. **Story Generation**: The backend generates stories using the selected prompting technique.
-3. **Evaluation**: Generated stories are evaluated using ROUGE, BLEU, METEOR, and coherence metrics.
-4. **Visualization**: Results are displayed with scores and comparative graphs.
+1. **User Input**: Users can select a story title and genre or provide custom prompts through the web interface.
+2. **Story Generation**: The backend processes the input and generates stories using the selected prompting technique.
+3. **Evaluation**: The system evaluates the generated stories using metrics such as ROUGE, BLEU, METEOR, and coherence to measure quality and relevance.
+4. **Visualization**: Results are presented through comparative graphs and scores for user review.
 
+Additionally, the system includes two distinct modules:
+- **Default Prompt Module**: Generates stories using predefined prompts.
+- **Custom Prompt Module**: Allows users to craft and generate stories based on their custom inputs.
 ---
+
 
 ## Repository Structure
 
