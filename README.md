@@ -23,6 +23,31 @@ Prompt Story Generator is an interactive storytelling system designed to generat
 
 ---
 
+### Installing Conda
+
+To use this project, you will need Anaconda or Miniconda installed on your system. Follow these steps:
+
+1. Download the installer:
+   - [Anaconda](https://www.anaconda.com/products/distribution#download-section) (full version with additional tools)
+   - [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (lightweight version)
+
+2. Install Conda:
+   - For Windows:
+     - Double-click the downloaded installer and follow the on-screen instructions.
+   - For macOS/Linux:
+     - Open a terminal and run the following command (replace the filename with the actual downloaded file):
+       ```bash
+       bash Miniconda3-latest-Linux-x86_64.sh
+       ```
+     - Follow the prompts to complete the installation.
+
+3. Verify the installation:
+   ```bash
+   conda --version
+   ```
+
+---
+
 ### Setup Instructions
 
 1. Navigate to the project directory:
