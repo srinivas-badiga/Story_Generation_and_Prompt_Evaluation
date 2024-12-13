@@ -93,7 +93,7 @@ To use this project, you will need Anaconda or Miniconda installed on your syste
 
 1. **User Input**: Users can select a story title and genre or provide custom prompts through the web interface.
 2. **Story Generation**: The backend processes the input and generates stories using the selected prompting technique.
-3. **Evaluation**: The system evaluates the generated stories using metrics such as ROUGE, BLEU, METEOR, and coherence to measure quality and relevance.
+3. **Evaluation**: The system evaluates the generated stories using metrics such as ROUGE, BLEU, METEOR, coherence and confidence scores to measure quality and relevance.
 4. **Visualization**: Results are presented through comparative graphs and scores for user review.
 
 Additionally, the system includes two distinct modules:
